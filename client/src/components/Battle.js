@@ -111,14 +111,14 @@ export default class Battle extends React.Component {
           <div className='row space-around'>
             {playerOne === null && (
               <PlayerInput
-                label='Player One'
+                label='PlayerOne'
                 onSubmit={(player) => this.handleSubmit('playerOne', player)}
               />
             )}
 
             {playerTwo === null && (
               <PlayerInput
-                label='Player Two'
+                label='PlayerTwo'
                 onSubmit={(player) => this.handleSubmit('playerTwo', player)}
               />
             )}
