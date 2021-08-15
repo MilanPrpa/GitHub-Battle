@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { FaUserFriends, FaFighterJet, FaTrophy } from 'react-icons/fa'
+import { FaUserFriends, FaFighterJet, FaTrophy, FaTimesCircle } from 'react-icons/fa'
 import PropTypes from 'prop-types'
+import Results from './Results'
 
 function Instructions() {
   return (
@@ -82,7 +83,29 @@ PlayerInput.propTypes = {
   label: PropTypes.string.isRequired
 }
 
-
+function PlayerPreview({ username, onReset, label }) {
+  return (
+    <div className='column player'>
+      <h3 className='player-label'>{label}</h3>
+      <div className='row bg-light'>
+        <div className='player-info'>
+          <img
+            src={`https://github.com/${username}.png?size=200`}
+            alt={`Avatar for ${username}`}
+          />
+          <a
+            href={`https://github.com/${username}`}
+            className='link'>
+            {username}
+          </a>
+        </div>
+        <button className='btn-clear flex-center' onClick={onReset}>
+          <FaTimesCircle color='rgb(194, 57, 42)' size={26} />
+        </button>
+      </div>
+    </div>
+  )
+}
 
 export default class Battle extends React.Component {
   constructor(props) {
@@ -90,9 +113,11 @@ export default class Battle extends React.Component {
 
     this.state = {
       playerOne: null,
-      playerTwo: null
+      playerTwo: null,
+      battle: false
     }
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleReset = this.handleReset.bind(this)
   }
 
   handleSubmit(id, player) {
@@ -100,8 +125,17 @@ export default class Battle extends React.Component {
       [id]: player
     })
   }
+  handleReset(id) {
+    this.setState({
+      [id]: null
+    })
+  }
   render() {
-    const { playerOne, playerTwo } = this.state
+    const { playerOne, playerTwo, battle } = this.state
+    if (battle === true) {
+      return <Results playerOne={playerOne} playerTwo={playerTwo} />
+
+    }
     return (
       <React.Fragment>
         <Instructions />
@@ -109,20 +143,40 @@ export default class Battle extends React.Component {
         <div className='players-container'>
           <h1 className='center-text header-lg'>Players</h1>
           <div className='row space-around'>
-            {playerOne === null && (
-              <PlayerInput
+            {playerOne === null
+              ? <PlayerInput
                 label='PlayerOne'
                 onSubmit={(player) => this.handleSubmit('playerOne', player)}
+              /> :
+              <PlayerPreview
+                username={playerOne}
+                onReset={() => this.handleReset('playerOne')}
+                label='Player One'
               />
-            )}
+            }
 
-            {playerTwo === null && (
+            {playerTwo === null
+              ?
               <PlayerInput
                 label='PlayerTwo'
                 onSubmit={(player) => this.handleSubmit('playerTwo', player)}
               />
-            )}
+              :
+              <PlayerPreview
+                username={playerTwo}
+                onReset={() => this.handleReset('playerTwo')}
+                label='Player Two'
+              />
+            }
           </div>
+          {playerOne && playerTwo && (
+            <button
+              className='btn btn-dark btn-space'
+              onClick={() => this.setState({ battle: true })}
+            >
+              Battle
+              </button>
+          )}
         </div>
       </React.Fragment>
     )
