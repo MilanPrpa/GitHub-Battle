@@ -1,4 +1,5 @@
 import React from 'react'
+import { battle } from '../utils/api'
 
 export default class Results extends React.Component {
   render() {
