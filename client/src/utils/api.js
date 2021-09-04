@@ -1,6 +1,6 @@
 const id = "YOUR_CLIENT_ID"
 const sec = "YOUR_SECRET_ID"
-// if too many requests github api
+// added params per gituhub docs if too many requests to  github api
 const params = `?client_id=${id}&client_secret=${sec}`
 
 function getErrorMsg(message, username) {
